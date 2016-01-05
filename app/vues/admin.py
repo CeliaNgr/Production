@@ -11,18 +11,21 @@ from app import db
 
 
 class VueModele(ModelView):
+    
     '''
     Vue de base qui implémente une authentification
     HTTP. Toutes les autres vues héritent de cette vue.
     '''
 
     def is_accessible(self):
-        auth = request.authorization or request.environ.get(
-            'REMOTE_USER')  # workaround for Apache
+        
+        auth = request.authorization or request.environ.get('REMOTE_USER')  # workaround for Apache
+        
         if not auth or (auth.username, auth.password) != app.config['ADMIN_CREDENTIALS']:
-            raise HTTPException('', Response('Il faut rentrer les identifiants administrateur.', 401,
-                                             {'WWW-Authenticate': 'Basic realm="Identifiants requis"'}
-                                             ))
+            raise HTTPException(
+                '',Response('Il faut rentrer les identifiants administrateur.',401,{'WWW-Authenticate': 'Basic realm="Identifiants requis"'})      
+            )
+            
         return True
 
 
@@ -37,10 +40,17 @@ class VueUtilisateur(VueModele):
     column_exclude_list = ['_mdp']
 
     # Colonnes pour chercher
-    column_searchable_list = ['prenom', 'nom']
+    column_searchable_list = [
+        'prenom', 
+        'nom'
+    ]
 
     # Colonnes pour filtrer
-    column_filters = ['categorie', 'inscription', 'confirmation']
+    column_filters = [
+        'categorie',
+        'inscription',
+        'confirmation'
+    ]
 
 
 class VueSecteur(VueModele) : 
@@ -76,7 +86,10 @@ class VueVehicule(VueModele) :
     column_exclude_list = ['immatriculation']    
     
     #Colonnes pour chercher
-    column_searchable_list = ['marque','couleur']    
+    column_searchable_list = [
+        'marque',
+        'couleur'
+    ]    
 
 class VueConducteur(VueModele) :
 
@@ -86,7 +99,10 @@ class VueConducteur(VueModele) :
     can_delete = False
         
     #Colonnes pour chercher
-    column_searchable_list = ['nom','prenom']
+    column_searchable_list = [
+        'nom',
+        'prenom'
+    ]
 
 
 class VueAdresse(VueGeo) :
